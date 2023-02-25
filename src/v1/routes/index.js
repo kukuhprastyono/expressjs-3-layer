@@ -1,11 +1,9 @@
+/* eslint-disable import/extensions */
 import express from 'express';
+import { WorkoutRoutes } from './workoutRoutes.js';
 
-const router = express.Router();
+const expressRouter = express.Router();
 
-router.route('/').get((req, res) => {
-  res.send({
-    message: req.baseUrl,
-  });
-});
+expressRouter.use('/workouts', WorkoutRoutes);
 
-export default router;
+export default expressRouter;
