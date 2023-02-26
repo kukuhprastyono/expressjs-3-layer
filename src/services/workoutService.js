@@ -6,8 +6,9 @@ const getAllWorkouts = () => {
   return allWorkouts;
 };
 
-const getOneWorkout = () => {
-
+const getOneWorkout = (workoutId) => {
+  const workout = Workout.getOneWorkout(workoutId);
+  return workout;
 };
 
 const createNewWorkout = (newWorkout) => {
@@ -18,17 +19,17 @@ const createNewWorkout = (newWorkout) => {
     updatedAt: new Date().toLocaleString('en-US', { timeZone: 'UTC' }),
   };
 
-  console.log(workoutToInsert);
   const createdWorkout = Workout.createNewWorkout(workoutToInsert);
   return createdWorkout;
 };
 
-const updateOneWorkout = () => {
-
+const updateOneWorkout = (workoutId, changes) => {
+  const upadatedWorkout = Workout.updateOneWorkout(workoutId, changes);
+  return upadatedWorkout;
 };
 
-const deleteOneWorkout = () => {
-
+const deleteOneWorkout = (workoutId) => {
+  Workout.deleteOneWorkout(workoutId);
 };
 
 export {
