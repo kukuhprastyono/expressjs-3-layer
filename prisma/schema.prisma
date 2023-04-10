@@ -11,22 +11,31 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  uuid         String         @default(uuid())
-  email        String         @unique
-  hash         String
-  name         String
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
-  RefreshToken RefreshToken[]
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  hash          String
+  name          String
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  refreshTokens RefreshToken[]
+  roles         Role[]
+  // Book         Book[]
 
-  @@index(fields: [uuid])
   @@map("users")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User[]
+
+  @@map("roles")
 }
 
 model RefreshToken {
   id        Int       @id @default(autoincrement())
-  uuid      String    @default(uuid())
   userId    Int       @map("user_id")
   token     String
   createdAt DateTime  @default(now()) @map("created_at")
@@ -36,3 +45,68 @@ model RefreshToken {
 
   @@map("refresh_tokens")
 }
+
+// model BookCategory {
+//   id        Int      @id @default(autoincrement())
+//   uuid      String   @default(uuid())
+//   name      String
+//   slug      String
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+//   books     Book[]
+
+//   @@index(fields: [uuid])
+//   @@map("book_categories")
+// }
+
+// model Author {
+//   id        Int      @id @default(autoincrement())
+//   uuid      String   @default(uuid())
+//   name      String
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+//   books     Book[]
+
+//   @@index(fields: [uuid])
+//   @@map("authors")
+// }
+
+// model Publisher {
+//   id        Int      @id @default(autoincrement())
+//   uuid      String   @default(uuid())
+//   name      String
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+//   books     Book[]
+
+//   @@index(fields: [uuid])
+//   @@map("publishers")
+// }
+
+// model Book {
+//   id            Int       @id @default(autoincrement())
+//   uuid          String    @default(uuid())
+//   userId        Int       @map("user_id")
+//   publisherId   Int?      @map("publisher_id")
+//   title         String
+//   slug          String // generated
+//   description   String?
+//   numberOfPage  Int?      @map("number_of_page")
+//   publishedAt   DateTime? @map("published_at")
+//   isbn          String?
+//   language      String?
+//   weightInGr    Int?      @map("weight_in_gr")
+//   widthInCm     Int?      @map("width_in_cm")
+//   heightInCm    Int?      @map("height_in_cm")
+//   thicknessInCm Int?      @map("thickness_in_cm")
+//   createdAt     DateTime  @default(now()) @map("created_at")
+//   updatedAt     DateTime  @updatedAt @map("updated_at")
+
+//   user           User           @relation(fields: [userId], references: [id])
+//   bookCategories BookCategory[]
+//   authors        Author[]
+//   publisher      Publisher?     @relation(fields: [publisherId], references: [id])
+
+//   @@index(fields: [uuid])
+//   @@map("books")
+// }

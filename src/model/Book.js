@@ -3,21 +3,27 @@ import CreateError from 'http-errors';
 
 const prisma = new PrismaClient();
 
-export const createOneUser = async (
-	data = { email: '', hash: '', name: '' }
+export const getManyBook = async (
+	data = {
+		page: 1,
+		size: 10,
+	}
 ) => {
 	try {
-		return await prisma.user.create({ data });
+		return await prisma.book.findMany({
+			skip: data.size * (data.page - 1),
+			take: data.size,
+		});
 	} catch (error) {
 		return CreateError(500, { code: 500, data: null, errors: null });
 	}
 };
 
-export const getOneUserByEmail = async (email = '') => {
+export const getOneBook = async ({ id }) => {
 	try {
-		return await prisma.user.findUnique({
+		return await prisma.book.findUnique({
 			where: {
-				email,
+				id,
 			},
 		});
 	} catch (error) {
