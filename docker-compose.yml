@@ -1,14 +1,36 @@
 version: '3.8'
 services:
-  dev-db:
-    image: 'postgres:13'
-    ports:
-      - 5434:5432
+  app:
+    container_name: app
+    build: .
+    depends_on:
+      - postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: book-store
+      DATABASE_URL: ${DATABASE_URL}
+      ACCESS_TOKEN_EXPIRED: ${ACCESS_TOKEN_EXPIRED}
+      REFRESH_TOKEN_EXPIRED: ${REFRESH_TOKEN_EXPIRED}
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+    ports:
+      - '3000:3000'
     networks:
       - express-3-layer
+  postgres:
+    container_name: db
+    image: 'postgres:13'
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PORT: ${DB_PORT}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - express-3-layer
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
 networks:
   express-3-layer:
+
+volumes:
+  pgdata1: {}
