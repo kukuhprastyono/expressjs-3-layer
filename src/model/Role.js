@@ -4,20 +4,19 @@ import logger from '../helper/logger.js';
 
 const prisma = new PrismaClient();
 
-export const createOneUser = async (data = {}) => {
+export const createOneRole = async (data = {}) => {
 	try {
-		return await prisma.user.create({ data });
+		return await prisma.role.create({ data });
 	} catch (error) {
 		logger.error(error.message);
 		return CreateError(500, { code: 500, data: null, errors: null });
 	}
 };
-
-export const getOneUserByEmail = async (email = '') => {
+export const getOneRoleByName = async (name = '') => {
 	try {
-		return await prisma.user.findUnique({
+		return await prisma.role.findUnique({
 			where: {
-				email,
+				name,
 			},
 		});
 	} catch (error) {

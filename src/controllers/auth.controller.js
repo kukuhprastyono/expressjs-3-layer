@@ -7,6 +7,7 @@ import * as User from '../model/User.js';
 import * as RefreshToken from '../model/RefreshToken.js';
 import { generateAccessToken, generateRefreshToken } from '../helper/jwt.js';
 import logger from '../helper/logger.js';
+import * as Role from '../model/Role.js';
 
 export const login = async (req, res) => {
 	try {
@@ -124,11 +125,19 @@ export const register = async (req, res) => {
 				})
 			);
 		}
+
+		let getOneRoleByName = await Role.getOneRoleByName('customer');
+		if (!getOneRoleByName) {
+			getOneRoleByName = await Role.createOneRole({ name: 'customer' });
+		}
 		const hash = await bcrypt.hash(password, 10);
 		const createOneUser = await User.createOneUser({
 			email,
 			hash,
 			name,
+			roles: {
+				connect: [{ id: getOneRoleByName.id }],
+			},
 		});
 		if (createOneUser?.statusCode === 500) {
 			return res.send(createOneUser);
